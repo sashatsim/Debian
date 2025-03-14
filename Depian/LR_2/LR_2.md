@@ -39,7 +39,7 @@
 > Для создания резервной копии базы данных была
 > выполнена следующая команда:
 >```bash
->`pg_dump -U postgres -Fc -f dbtsimbakiuka_backup.dump dbtsimbaliuka`.
+>pg_dump -U postgres -Fc -f dbtsimbakiuka_backup.dump dbtsimbaliuka
 >```
 > ![](media/image1.png)
 
@@ -68,7 +68,7 @@
 > Для создания резервной копии **отдельной** таблицы в базе данных  
 > `dbtsimbaliuka` была использована следующая команда:
 > ```bash
-> `pg_dump -U postgres -Fc -f selected_tables_backup.dump -t public.cars dbtsimbaliuka`
+> pg_dump -U postgres -Fc -f selected_tables_backup.dump -t public.cars dbtsimbaliuka
 > ```
 > ![](media/image2.png)
 > 
@@ -173,9 +173,7 @@
 >выполняющиеся запросы.
 > ```bash
 > SELECT pid, usename, application_name, state, query, query_start
->
 > FROM pg_stat_activity
->
 > WHERE state = \'active\';
 > ```
 >
