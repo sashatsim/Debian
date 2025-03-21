@@ -9,9 +9,9 @@
 /etc/postgresql/13/main/postgresql.conf. Вносим изменения и сохраняем
 файл.
 
-![](/media/image1.png)
+![](media/image1.png)
 
-![](/media/image2.png)
+![](media/image2.png)
 
 В файле конфигурации были изменены следующие параметры:
 
@@ -30,7 +30,7 @@
     использует это значение для оценки доступности данных в памяти перед
     чтением с диска.
 
-![](/media/image3.png)
+![](media/image3.png)
 
 Чтобы изменения вступили в силу,
 необходимо перезапустить службу: sudo systemctl restart postgresql.
@@ -39,7 +39,7 @@
 work_mem; SHOW maintenance_work_mem; SHOW effective_cache_size;. Вывод
 подтверждает, что новые параметры успешно загружены.
 
-![](/media/image4.png)
+![](media/image4.png)
 
 В результате настройки были оптимизированы параметры памяти PostgreSQL,
 что положительно влияет на производительность, снижая нагрузку на диск и
@@ -52,16 +52,16 @@ generate_series, чтобы добавить 999 999 записей: CREATE TABL
 SERIAL PRIMARY KEY, place INTEGER); INSERT INTO player(place) SELECT
 generate_series(1, 999999);
 
-![](/media/image5.png)
+![](media/image5.png)
 
 Выполним EXPLAIN и EXPLAIN ANALYZE для поиска записи с place = 752020:
 EXPLAIN SELECT \* FROM player WHERE place = 752020;
 
-![](/media/image5.png)
+![](media/image5.png)
 
 EXPLAIN ANALYZE SELECT \* FROM player WHERE place = 752020; :
 
-![](/media/image6.png)
+![](media/image6.png)
 
 Вывод показывает, что PostgreSQL выполняет последовательное сканирование
 (Seq Scan) всей таблицы, проверяя каждую строку. Недостатки Seq Scan:
@@ -76,9 +76,9 @@ ON player(place);
 После создания индекса снова выполняем запрос: EXPLAIN ANALYZE SELECT \*
 FROM player WHERE place = 752020;
 
-![](/media/image7.png)
+![](media/image7.png)
 
-![](/media/image8.png)
+![](media/image8.png)
 
 Преимущества Index Scan:
 
@@ -138,12 +138,12 @@ END;
 
 \$\$ LANGUAGE plpgsql;
 
-![](/media/image9.png)
+![](media/image9.png)
 
 Пробуем выполнить команды: SELECT
 check_place(-18); и SELECT check_place(18);
 
-![](/media/image10.png)
+![](media/image10.png)
 
 Проверяем, есть ли эта запись в таблице, выполнив
 команду: SELECT \* FROM player WHERE place = 18; Запись с числом 18
@@ -187,13 +187,13 @@ FUNCTION check_positive_place();, он делает следующее:
 -   Каждая строка (FOR EACH ROW) перед изменением проверяется через
     функцию check_positive_place();
 
--   ![](/media/image11.png)
+-   ![](media/image11.png)
 
 Если значение place меньше 0, триггер вызовет ошибку и не даст выполнить запрос.
 
 > Проверяем работу триггера и триггерной функции:
 
-![](/media/image12.png)
+![](media/image12.png)
 
 Как результат видим, что при попытке ввода отрицательного значения или
 обновления существующей записи на отрицательное значение срабатывает
@@ -227,7 +227,7 @@ PostgreSQL может автоматически выполнять очистк
 -   autovacuum_analyze_scale_factor = 0.02 --- когда обновлять
     статистику (2% изменённых строк).
 
-![](/media/image13.png)
+![](media/image13.png)
 
 Проверяем влючен ли autovacuum: SHOW
 autovacuum; :
@@ -235,7 +235,7 @@ autovacuum; :
 Если требуется очистить таблицу вручную, можно выполнить: VACUUM ANALYZE
 player;. Это удалит мёртвые строки и обновит статистику.
 
-![](/media/image14.png)
+![](media/image14.png)
 
 Чтобы посмотреть, когда последний раз выполнялась автоматическая или
 ручная очистка: SELECT relname, n_live_tup, n_dead_tup, last_autovacuum,
@@ -249,7 +249,7 @@ last_vacuum FROM pg_stat_user_tables WHERE relname = \'player\';, где
 
 -   last_vacuum --- время последнего ручного VACUUM.
 
-![](/media/image15.png)
+![](media/image15.png)
 
 Можно также проверить использование индексов: SELECT relname,
 indexrelname, idx_scan, idx_tup_read, idx_tup_fetch FROM
@@ -259,7 +259,7 @@ pg_stat_all_indexes WHERE schemaname = \'public\';, где:
 
 -   idx_tup_read --- сколько строк прочитано с индексом;
 
--   ![](/media/image16.png)
+-   ![](media/image16.png)
 
 idx_tup_fetch --- сколько строк реально использовано.
 
